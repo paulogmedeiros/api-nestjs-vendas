@@ -1,7 +1,7 @@
 import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
 
-@Entity('users')
-export class Users {
+@Entity('products')
+export class Products {
   @PrimaryColumn()
   id: string;
 
@@ -9,13 +9,7 @@ export class Users {
   name: string;
 
   @Column()
-  password: string;
-
-  @Column()
-  email: string;
-
-  @Column()
-  role: string;
+  value: string;
 
   @CreateDateColumn()
   created_at: Date;
