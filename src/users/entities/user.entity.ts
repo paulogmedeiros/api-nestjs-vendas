@@ -1,4 +1,4 @@
-import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, Index, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, Index} from 'typeorm';
 import { Role } from '../enum/user.enum';
 import * as bcrypt from 'bcrypt';
 @Entity('users')
@@ -28,6 +28,10 @@ export class Users {
 
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })  
   deletedAt?: Date;
+
+  constructor(partial: Partial<Users>) {
+    Object.assign(this, partial);
+  }
 
   async hashPassword(): Promise<void> {
     const salt = await bcrypt.genSalt();
