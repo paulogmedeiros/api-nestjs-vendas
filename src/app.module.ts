@@ -4,16 +4,19 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
-import { StocksModule } from './stocks/stocks.module';
 import { ProductsModule } from './products/products.module';
 import { ProductValuesModule } from './product-values/product-values.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { ProductsIngredientsModule } from './products-ingredients/products-ingredients.module';
-
+import { Users } from './users/entities/user.entity';
+import { Ingredients } from './ingredients/entities/ingredient.entity';
+import { Products } from './products/entities/product.entity';
+import { ProductsIngredients } from './products-ingredients/entities/products-ingredient.entity';
+import { ProductValues } from './product-values/entities/product-value.entity';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,  
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -25,13 +28,18 @@ import { ProductsIngredientsModule } from './products-ingredients/products-ingre
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [],
-        synchronize: true, 
+        entities: [__dirname + '/**/*.entity{.js,.ts}'],
+        synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([]),
+    TypeOrmModule.forFeature([
+      Users,
+      Ingredients,
+      Products,
+      ProductsIngredients,
+      ProductValues,
+    ]),
     UsersModule,
-    StocksModule,
     ProductsModule,
     ProductValuesModule,
     IngredientsModule,
@@ -41,4 +49,3 @@ import { ProductsIngredientsModule } from './products-ingredients/products-ingre
   providers: [AppService],
 })
 export class AppModule {}
-

@@ -1,22 +1,36 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
-
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, Index, BeforeInsert, BeforeUpdate } from 'typeorm';
+import { Role } from '../enum/user.enum';
+import * as bcrypt from 'bcrypt';
 @Entity('users')
 export class Users {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ length: 100 })
   name: string;
 
   @Column()
-  password: string;
+  password: string; 
 
-  @Column()
+  @Column({ unique: true, length: 200 })  
+  @Index() 
   email: string;
 
-  @Column()
-  role: string;
+  @Column({ type: 'enum', enum: Role, nullable: false })
+  @Index()  
+  role: Role;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true })  
+  deletedAt?: Date;
+
+  async hashPassword(): Promise<void> {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(this.password, salt);
+  }
 }

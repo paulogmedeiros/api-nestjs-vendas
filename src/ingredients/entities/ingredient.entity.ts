@@ -1,13 +1,26 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn, DeleteDateColumn } from 'typeorm';
+import { Unit } from '../enum/ingredient.enum'; 
 
 @Entity('ingredients')
 export class Ingredients {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ length: 100 })
   name: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @Column('decimal', { precision: 10, scale: 2, nullable: true })
+  quantity?: number;
+
+  @Column({ type: 'enum', enum: Unit, nullable: true })
+  unit?: Unit;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true })  
+  deletedAt?: Date;
 }

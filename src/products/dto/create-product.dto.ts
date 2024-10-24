@@ -8,4 +8,9 @@ export class CreateProductDto {
   @IsString()
   @IsNotEmpty()
   value: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  quantity?: string;
 }

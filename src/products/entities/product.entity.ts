@@ -1,16 +1,25 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn } from 'typeorm';
+import { Entity, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('products')
 export class Products {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ length: 100 })
   name: string;
 
-  @Column()
-  value: string;
+  @Column('decimal', { precision: 10, scale: 2 })
+  value: number;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @Column('int', { unsigned: true })
+  quantity: number;
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true })
+  deletedAt?: Date;
 }

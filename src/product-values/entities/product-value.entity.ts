@@ -1,17 +1,23 @@
-import { Entity, PrimaryColumn, Column, CreateDateColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, CreateDateColumn, ManyToOne, UpdateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Products } from '../../products/entities/product.entity';
 
 @Entity('product_values')
 export class ProductValues {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @ManyToOne(() => Products, (product) => product.id)
   product: Products;
 
-  @Column()
-  value: string;
+  @Column('decimal', { precision: 10, scale: 2 })
+  value: number;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true })
+  deletedAt?: Date;
 }

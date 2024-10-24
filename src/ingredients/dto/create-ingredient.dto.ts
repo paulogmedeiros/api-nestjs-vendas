@@ -4,4 +4,9 @@ export class CreateIngredientDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsOptional()
+  quantity?: string;
 }
