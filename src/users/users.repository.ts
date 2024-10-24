@@ -23,6 +23,11 @@ export class UsersRepository {
     return this._usersRepository.findOne({ where: { id } });
   }
 
+  public async selectUserByEmail(email:Users['email']): Promise<Users> {
+    return this._usersRepository.findOne({ where: { email } });
+  }
+
+
   public async updateUser(user: Users, newData: UpdateUserDto): Promise<Users>{
     this._usersRepository.merge(user,newData);
     return await this._usersRepository.save(user);
@@ -32,3 +37,6 @@ export class UsersRepository {
     await this._usersRepository.delete(id);
   }
 }
+
+// throw new HttpException( `Ação de id: ${actionId} não encontrado`,HttpStatus.BAD_REQUEST,);
+// throw new NotFoundException(`Não existe em nosso registro uma campanha de numero #${id} !`,);

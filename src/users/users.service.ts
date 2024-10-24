@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersRepository } from './users.repository';
@@ -9,6 +13,7 @@ export class UsersService {
   constructor(private readonly _usersRepository: UsersRepository) {}
 
   public async create(createUserDto: CreateUserDto): Promise<Users> {
+    await this.validateEmail(createUserDto.email);
     const user = new Users(createUserDto);
     await user.hashPassword();
     return await this._usersRepository.insertUser(user);
@@ -19,22 +24,35 @@ export class UsersService {
   }
 
   public async findOne(id: string): Promise<Users> {
-    return await this._usersRepository.selectUserById(id);
+    const user = await this._usersRepository.selectUserById(id);
+    if (!user) throw new NotFoundException('Usuário não encontrado');
+    return user;
   }
 
-  public async update(id: string, updateUserDto: UpdateUserDto): Promise<Users> {
+  public async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<Users> {
     const user = await this.findOne(id);
-    if(!user){
-      return null
+    if (updateUserDto.email) {
+      if (updateUserDto.email != user.email) {
+        await this.validateEmail(updateUserDto.email);
+      }
     }
-    return await this._usersRepository.updateUser(user,updateUserDto)
+    return await this._usersRepository.updateUser(user, updateUserDto);
   }
 
   public async remove(id: string) {
-    const user = await this.findOne(id);
-    if(!user){
-      return null
-    }
+    await this.findOne(id);
     return await this._usersRepository.deleteUser(id);
+  }
+
+  private async findUserByEmail(email: Users['email']) {
+    return await this._usersRepository.selectUserByEmail(email);
+  }
+
+  private async validateEmail(email: Users['email']) {
+    const emailExist = await this.findUserByEmail(email);
+    if (emailExist) throw new BadRequestException('Esse endereço de email já está em uso');
   }
 }
