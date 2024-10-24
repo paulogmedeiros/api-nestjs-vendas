@@ -8,11 +8,7 @@ import { ProductsModule } from './products/products.module';
 import { ProductValuesModule } from './product-values/product-values.module';
 import { IngredientsModule } from './ingredients/ingredients.module';
 import { ProductsIngredientsModule } from './products-ingredients/products-ingredients.module';
-import { Users } from './users/entities/user.entity';
-import { Ingredients } from './ingredients/entities/ingredient.entity';
-import { Products } from './products/entities/product.entity';
-import { ProductsIngredients } from './products-ingredients/entities/products-ingredient.entity';
-import { ProductValues } from './product-values/entities/product-value.entity';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -32,13 +28,6 @@ import { ProductValues } from './product-values/entities/product-value.entity';
         synchronize: true,
       }),
     }),
-    TypeOrmModule.forFeature([
-      Users,
-      Ingredients,
-      Products,
-      ProductsIngredients,
-      ProductValues,
-    ]),
     UsersModule,
     ProductsModule,
     ProductValuesModule,
