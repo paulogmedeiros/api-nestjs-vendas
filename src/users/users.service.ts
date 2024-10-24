@@ -11,22 +11,30 @@ export class UsersService {
   public async create(createUserDto: CreateUserDto): Promise<Users> {
     const user = new Users(createUserDto);
     await user.hashPassword();
-    return await this._usersRepository.createUser(user);
+    return await this._usersRepository.insertUser(user);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  public async findAll(): Promise<Users[]> {
+    return await this._usersRepository.selectAllUser();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  public async findOne(id: string): Promise<Users> {
+    return await this._usersRepository.selectUserById(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  public async update(id: string, updateUserDto: UpdateUserDto): Promise<Users> {
+    const user = await this.findOne(id);
+    if(!user){
+      return null
+    }
+    return await this._usersRepository.updateUser(user,updateUserDto)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  public async remove(id: string) {
+    const user = await this.findOne(id);
+    if(!user){
+      return null
+    }
+    return await this._usersRepository.deleteUser(id);
   }
 }

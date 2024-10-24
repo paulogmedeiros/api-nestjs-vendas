@@ -3,22 +3,22 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Role } from '../enum/user.enum';
 
 export class CreateUserDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'John Doe' })
   @IsString()
   @IsNotEmpty()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'password123' })
   @IsString()
   @IsNotEmpty()
   password: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'john.doe@example.com' })
   @IsEmail()
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: Role.ADMINISTRATOR })
   @IsEnum(Role)
   @IsNotEmpty()
   role: Role;
