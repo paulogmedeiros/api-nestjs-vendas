@@ -39,6 +39,7 @@ export class UsersService {
         await this.validateEmail(updateUserDto.email);
       }
     }
+    user.updateUserData();
     return await this._usersRepository.updateUser(user, updateUserDto);
   }
 
