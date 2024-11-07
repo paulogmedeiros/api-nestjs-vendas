@@ -42,16 +42,16 @@ export class UsersService {
     return await this._usersRepository.updateUser(user, updateUserDto);
   }
 
-  public async remove(id: string) {
+  public async remove(id: string): Promise<void> {
     await this.findOne(id);
     return await this._usersRepository.deleteUser(id);
   }
 
-  private async findUserByEmail(email: Users['email']) {
+  private async findUserByEmail(email: Users['email']): Promise<Users> {
     return await this._usersRepository.selectUserByEmail(email);
   }
 
-  private async validateEmail(email: Users['email']) {
+  private async validateEmail(email: Users['email']): Promise<void>  {
     const emailExist = await this.findUserByEmail(email);
     if (emailExist) throw new BadRequestException('Esse endereço de email já está em uso');
   }
